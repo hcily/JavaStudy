@@ -13,36 +13,69 @@ public class QuickSortTest {
 
 		int left = min;
 		int right = max;
-		int flag = a[(right - left) / 2 + left];
+		int flag = a[min];
 
 		while (left < right) {
-			if (a[left] < flag) {
-				left++;
-				continue;
-			}
-			if (a[right] > flag) {
+			while (a[right] >= flag && left < right) {
 				right--;
-				continue;
 			}
-			int temp = a[left];
-			a[left] = a[right];
-			a[right] = temp;
+
+			while (a[left] <= flag && left < right) {
+				left++;
+			}
+
+			if (left < right) {
+				int temp = a[left];
+				a[left] = a[right];
+				a[right] = temp;
+			}
 		}
 
-		int middle = left;
-		if (a[middle] < flag) {
-			sort(a, min, middle);
-			sort(a, middle + 1, max);
-		} else {
-			sort(a, min, middle - 1);
-			sort(a, middle, max);
+		a[min] = a[left];
+		a[left] = flag;
+
+		sort(a, min, left - 1);
+		sort(a, left + 1, max);
+	}
+
+	public void sort2(int a[], int min, int max) {
+		if (min >= max) {
+			return;
 		}
+		int left = min;
+		int right = max;
+		int middle = (right - left) / 2 + left;
+		int pivot = a[middle];
+
+		while (left < right) {
+			while (a[right] >= pivot && left < right) {
+				right--;
+			}
+			
+
+			while (a[left] <= pivot && left < right) {
+				left++;
+			}
+			
+			if (left < right) {
+				int temp = a[left];
+				a[left] = a[right];
+				a[right] = temp;
+			}
+		}
+
+		a[middle] = a[left];
+		a[left] = pivot;
+
+		sort2(a, min, left-1);
+		sort2(a, left + 1, max);
 	}
 
 	public static void main(String[] args) {
-		int a[] = new int[] { 12, 12, 34, 35, 23, 67, 2, 4, 98, 43 };
+		int a[] = new int[] { 12, 12, 34, 35, 23, 67, 2, 4, 98, 43, 2, 5 };
+		// 2, 12, 4, 12, 23, 67, 35, 34, 98, 43
 		QuickSortTest quickSortTest = new QuickSortTest();
-		quickSortTest.sort(a, 0, a.length-1);
+		quickSortTest.sort2(a, 0, a.length - 1);
 		print(a);
 	}
 
